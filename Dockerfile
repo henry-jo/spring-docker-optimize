@@ -1,13 +1,12 @@
 #syntax=docker/dockerfile:1.2
 ### build stage ###
-FROM openjdk:11 AS builder
-
+#FROM azul/zulu-openjdk:21 AS builder
+FROM eclipse-temurin:21-jdk AS builder
 # set arg
 ARG WORKSPACE=/home/spring-docker
 ARG BUILD_TARGET=${WORKSPACE}/build/libs
 WORKDIR ${WORKSPACE}
 
-# copy code & build
 COPY . .
 RUN ./gradlew clean bootJar
 
@@ -17,7 +16,7 @@ RUN jar -xf *.jar
 
 
 ### create image stage ###
-FROM openjdk:11
+FROM eclipse-temurin:21-jdk
 
 ARG WORKSPACE=/home/spring-docker
 ARG BUILD_TARGET=${WORKSPACE}/build/libs
@@ -32,4 +31,4 @@ COPY --from=builder ${BUILD_TARGET}/BOOT-INF/classes ${DEPLOY_PATH}/BOOT-INF/cla
 WORKDIR ${DEPLOY_PATH}
 
 EXPOSE 8080/tcp
-ENTRYPOINT ["java","org.springframework.boot.loader.JarLauncher"]
+ENTRYPOINT ["java","org.springframework.boot.loader.launch.JarLauncher"]

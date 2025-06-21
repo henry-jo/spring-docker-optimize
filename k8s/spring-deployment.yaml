@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: $title$
+  name: hello-spring-deployment
   labels:
-    app: $title$
+    app: hello-spring-deployment
 spec:
-  replicas: $1$
+  replicas: 1
   selector:
     matchLabels:
-      app: $title$
+      app: hello-spring-deployment
   template:
     metadata:
-      name: $title$
+      name: hello-spring-deployment
       labels:
-        app: $title$
+        app: hello-spring-deployment
     spec:
       containers:
-        - name: $title$
-          image: $nginx$
+        - name: hello-spring-deployment
+          image: my-spring-app:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: $80$
-              protocol: $TCP$
+            - containerPort: 8080
+              protocol: TCP
       restartPolicy: Always
-      $END$
+      
